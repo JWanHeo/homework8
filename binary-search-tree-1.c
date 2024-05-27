@@ -251,7 +251,7 @@ Node* searchRecursive(Node* ptr, int key)
 
 Node* searchIterative(Node* head, int key)
 {
-	Node* curr = head;
+	Node* curr = head->left;
 
 	while(curr != NULL && curr->key != key) { // curr이 가리키는 노드의 key가 입력받은 key와 동일할 때까지 반복
 		if (curr->key > key) { 
@@ -272,7 +272,7 @@ Node* searchIterative(Node* head, int key)
 
 int freeBST(Node* head)
 {
-	if(head->left == NULL) return 1;
+	if(head == NULL || head->left == NULL) return 1;
 
 	Node* curr = head->left;
 
