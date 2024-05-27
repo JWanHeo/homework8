@@ -129,17 +129,29 @@ int initializeBST(Node** h) {
 
 void inorderTraversal(Node* ptr)
 {
-	
+	if (ptr != NULL) {
+		inorderTraversal(ptr->left);
+		printf("[%d] ", ptr->key);
+		inorderTraversal(ptr->right);
+	}
 }
 
 void preorderTraversal(Node* ptr)
 {
-
+	if (ptr != NULL) {
+		printf("[%d] ", ptr->key);
+		preorderTraversal(ptr->left);
+		preorderTraversal(ptr->right);
+	}
 }
 
 void postorderTraversal(Node* ptr)
 {
-
+	if (ptr != NULL) {
+		postorderTraversal(ptr->left);
+		postorderTraversal(ptr->right);
+		printf("[%d] ", ptr->key);
+	}
 }
 
 
@@ -191,7 +203,7 @@ int deleteLeafNode(Node* head, int key)
 
 	while (curr != NULL && curr->key != key) { // 노드가 null이거나, 입력받은 key 값을 찾을 때까지 반복
 		parent = curr;
-		
+
 		if (curr->key > key) { 
 			curr = curr->left; // 노드의 key가 입력된 key보다 크면 왼쪽으로 이동
 		} else { 
@@ -227,6 +239,7 @@ Node* searchRecursive(Node* ptr, int key)
 		printf("입력한 key가 존재하지 않습니다.\n");
 		return NULL;
 	}
+
 	if(ptr->key == key) {
 		return ptr; // 입력받은 key가 ptr의 key와 동일한 경우
 	} else if(ptr->key > key){
@@ -239,17 +252,21 @@ Node* searchRecursive(Node* ptr, int key)
 Node* searchIterative(Node* head, int key)
 {
 	Node* curr = head;
-	while(curr != NULL) { // curr이 가리키는 노드의 key가 입력받은 key와 동일할 때까지 반복
-		if(curr->key == key) {
-			return curr; // key값이 동일하면 해당 노드 반환
-		} else if(curr->key > key) {
-			curr = curr->left; // curr의 key가 입력받은 key보다 크면 왼쪽으로 이동
-		} else {
-			curr = curr->right; // curr의 key가 입력받은 key보다 작으면 오른쪽으로 이동
+
+	while(curr != NULL && curr->key != key) { // curr이 가리키는 노드의 key가 입력받은 key와 동일할 때까지 반복
+		if (curr->key > key) { 
+			curr = curr->left; // 노드의 key가 입력된 key보다 크면 왼쪽으로 이동
+		} else { 
+			curr = curr->right; // 노드의 key가 입력된 key보다 작으면 오른쪽으로 이동
 		}
 	}
-	printf("입력한 key가 존재하지 않습니다.\n");
-	return NULL; // key를 찾지 못한 경우 NULL 반환
+
+	if(curr == NULL) {				
+		printf("입력한 key가 존재하지 않습니다.\n");
+		return NULL; // key를 찾지 못한 경우 NULL 반환
+	}
+
+	return curr;
 }
 
 
