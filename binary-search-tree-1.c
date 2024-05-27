@@ -127,7 +127,7 @@ int initializeBST(Node** h) {
 
 void inorderTraversal(Node* ptr)
 {
-
+	
 }
 
 void preorderTraversal(Node* ptr)
@@ -143,7 +143,38 @@ void postorderTraversal(Node* ptr)
 
 int insert(Node* head, int key)
 {
+	// 입력받은 key를 이용하여 새로운 노드 생성
+	Node* newNode = (Node*)malloc(sizeof(Node));
+	newNode->key = key;
+	newNode->left = newNode->right = NULL;
 
+	// head가 NULL인지 확인하고, NULL이면 입력 받은 key를 head가 가리키도록 함.
+	if(head->left == NULL) {
+		head->left = newNode;
+	} else { 
+		Node* curr = head->left;
+		
+		// head가 NULL이 아닌 경우, curr를 head로 지정. curr의 key와 입력받은 key를 비교하여 작으면 왼쪽, 크면 오른쪽으로 curr 이동.
+		while(1) {
+			if(curr->key > key) {
+				if(curr->left == NULL) { // 입력받은 key가 더 작은 경우, 현재 노드의 좌측 자식 노드가 없으면 새로운 노드 삽입 후 루프 종료.
+					curr->left = newNode;
+					break;
+				} else {
+					curr = curr->left; // 현재 노드 갱신
+				}
+			} else {
+				if(curr->right == NULL) { // 입력받은 key가 더 큰 경우, 현재 노드의 우측 자식 노드가 없으면 새로운 노드 삽입 후 루프 종료.
+					curr->right = newNode;
+					break;
+				} else {
+					curr = curr->right; // 현재 노드 갱신
+				}
+			}
+		}
+	}
+
+	return 1;
 }
 
 int deleteLeafNode(Node* head, int key)
@@ -153,12 +184,33 @@ int deleteLeafNode(Node* head, int key)
 
 Node* searchRecursive(Node* ptr, int key)
 {
-
+	if(ptr == NULL) { // 탐색 후 해당 key가 존재하지 않는 경우
+		printf("입력한 key가 존재하지 않습니다.\n");
+		return NULL;
+	}
+	if(ptr->key == key) {
+		return ptr; // 입력받은 key가 ptr의 key와 동일한 경우
+	} else if(ptr->key > key){
+		return searchRecursive(ptr->left, key); // ptr의 key가 입력받은 key보다 크면 왼쪽으로 이동 후 searchRecursive
+	} else {
+		return searchRecursive(ptr->right, key); // ptr의 key가 입력받은 key보다 작으면 오른쪽으로 이동 후 searchRecursive
+	}	
 }
 
 Node* searchIterative(Node* head, int key)
 {
-
+	Node* curr = head;
+	while(curr != NULL) { // curr이 가리키는 노드의 key가 입력받은 key와 동일할 때까지 반복
+		if(curr->key == key) {
+			return curr; // key값이 동일하면 해당 노드 반환
+		} else if(curr->key > key) {
+			curr = curr->left; // curr의 key가 입력받은 key보다 크면 왼쪽으로 이동
+		} else {
+			curr = curr->right; // curr의 key가 입력받은 key보다 작으면 오른쪽으로 이동
+		}
+	}
+	printf("입력한 key가 존재하지 않습니다.\n");
+	return NULL; // key를 찾지 못한 경우 NULL 반환
 }
 
 
