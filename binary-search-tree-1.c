@@ -39,6 +39,8 @@ int main()
 	Node* head = NULL;
 	Node* ptr = NULL;	/* temp */
 
+	printf("[----- 허제완 2020069031 -----]\n");
+
 	do{
 		printf("\n\n");
 		printf("----------------------------------------------------------------\n");
@@ -179,7 +181,44 @@ int insert(Node* head, int key)
 
 int deleteLeafNode(Node* head, int key)
 {
+	Node* curr = head->left;
+	Node* parent = NULL;
 
+	if (head == NULL || head->left == NULL) {
+		printf("트리가 비어있습니다.\n");
+		return 0; // 트리가 비어있는 경우 0 반환
+  }
+
+	while (curr != NULL && curr->key != key) { // 노드가 null이거나, 입력받은 key 값을 찾을 때까지 반복
+		parent = curr;
+		
+		if (curr->key > key) { 
+			curr = curr->left; // 노드의 key가 입력된 key보다 크면 왼쪽으로 이동
+		} else { 
+			curr = curr->right; // 노드의 key가 입력된 key보다 작으면 오른쪽으로 이동
+		}
+	}
+
+	if(curr == NULL) {
+		printf("입력한 key가 존재하지 않습니다.\n");
+		return 0; // key를 찾지 못한 경우 0 반환
+	}
+	
+	if (curr->left == NULL && curr->right == NULL) {
+		if (parent->left == curr) {
+			parent->left = NULL;
+		} else {
+			parent->right = NULL;
+		}
+
+		free(curr);
+		
+		return 1;
+	}
+
+	printf("the node [%d] is not a leaf", key);
+	
+	return 0;
 }
 
 Node* searchRecursive(Node* ptr, int key)
@@ -216,7 +255,12 @@ Node* searchIterative(Node* head, int key)
 
 int freeBST(Node* head)
 {
+	if(head->left == NULL) return 1;
 
+	freeBST(head->left);
+	freeBST(head->right);
+
+	free(head);
 }
 
 
