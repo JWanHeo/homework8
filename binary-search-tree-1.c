@@ -130,27 +130,27 @@ int initializeBST(Node** h) {
 void inorderTraversal(Node* ptr)
 {
 	if (ptr != NULL) {
-		inorderTraversal(ptr->left);
-		printf("[%d] ", ptr->key);
-		inorderTraversal(ptr->right);
+		inorderTraversal(ptr->left); // 좌측 노드부터 순회
+		printf("[%d] ", ptr->key); // 가운데 노드(root) 출력
+		inorderTraversal(ptr->right); // 이후 우측 노드 순회
 	}
 }
 
 void preorderTraversal(Node* ptr)
 {
 	if (ptr != NULL) {
-		printf("[%d] ", ptr->key);
-		preorderTraversal(ptr->left);
-		preorderTraversal(ptr->right);
+		printf("[%d] ", ptr->key); // 가운데 노드(root) 출력
+		preorderTraversal(ptr->left); // 이후 좌측 노드 순회하며 출력
+		preorderTraversal(ptr->right); // 마지막으로 우측 노드 순회하며 출력
 	}
 }
 
 void postorderTraversal(Node* ptr)
 {
 	if (ptr != NULL) {
-		postorderTraversal(ptr->left);
-		postorderTraversal(ptr->right);
-		printf("[%d] ", ptr->key);
+		postorderTraversal(ptr->left); // 좌측 노드부터 순회 및 출력
+		postorderTraversal(ptr->right); // 이후 우측 노드 순회 및 출력
+		printf("[%d] ", ptr->key); // 마지막으로 가운데(root)노드 출력
 	}
 }
 
@@ -202,7 +202,7 @@ int deleteLeafNode(Node* head, int key)
   }
 
 	while (curr != NULL && curr->key != key) { // 노드가 null이거나, 입력받은 key 값을 찾을 때까지 반복
-		parent = curr;
+		parent = curr; // 노드 삭제를 위한 부모 노드 업데이트
 
 		if (curr->key > key) { 
 			curr = curr->left; // 노드의 key가 입력된 key보다 크면 왼쪽으로 이동
@@ -216,19 +216,19 @@ int deleteLeafNode(Node* head, int key)
 		return 0; // key를 찾지 못한 경우 0 반환
 	}
 	
-	if (curr->left == NULL && curr->right == NULL) {
+	if (curr->left == NULL && curr->right == NULL) { // 리프 노드인지 확인
 		if (parent->left == curr) {
-			parent->left = NULL;
+			parent->left = NULL; // 해당 노드가 부모 노드의 좌측 자식이면 부모 노드의 left를 NULL로 초기화
 		} else {
-			parent->right = NULL;
+			parent->right = NULL; // 해당 노드가 부모 노드의 우측 자식이면 부모 노드의 right를 NULL로 초기화
 		}
 
-		free(curr);
+		free(curr); // 해당 노드 삭제
 		
 		return 1;
 	}
 
-	printf("the node [%d] is not a leaf", key);
+	printf("the node [%d] is not a leaf", key); // 리프 노드가 아닌 경우 출력
 	
 	return 0;
 }
@@ -274,10 +274,15 @@ int freeBST(Node* head)
 {
 	if(head->left == NULL) return 1;
 
-	freeBST(head->left);
-	freeBST(head->right);
+	Node* curr = head->left;
 
+	freeBST(curr->left); // root 노드의 좌측 노드들을 삭제
+	freeBST(curr->right); // root 노드의 우측 노드들을 삭제
+
+	free(curr);
 	free(head);
+
+	return 1;
 }
 
 
